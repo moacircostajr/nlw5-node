@@ -1,4 +1,6 @@
-export interface ISetting {
+interface ISetting {
   username: string
   chat: string
 }
+
+export { ISetting }

@@ -1,12 +1,13 @@
-import { getCustomRepository } from 'typeorm'
-import Setting from '../entities/Setting'
+import { Setting } from '../entities/Setting'
 import { ISetting } from '../protocols/ISetting'
-import SettingsRepository from '../repositories/SettingsRepository'
+import { SettingsService } from '../services/SettingsService'
 
-export default class SettingsController {
-  createNewSetting(setting: ISetting): Promise<ISetting> {
-    const settingsRepository: SettingsRepository = getCustomRepository(SettingsRepository)
-    const newSetting: Setting = settingsRepository.create(setting)
-    return settingsRepository.save(newSetting)
+class SettingsController {
+  createNewSetting(setting: ISetting): Promise<Setting> {
+    // validar e checar autorização
+    const settingsService = new SettingsService()
+    return settingsService.create(setting)
   }
 }
+
+export { SettingsController }
