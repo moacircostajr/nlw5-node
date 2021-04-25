@@ -5,14 +5,14 @@ import { ConnectionsService } from '../services/ConnectionsService'
 import { MessagesService } from '../services/MessagesService'
 import { UsersService } from '../services/UsersService'
 
-serverWs.on('connect', socket => {
+serverWs.on('connect', async socket => {
   const connectionService = new ConnectionsService()
   const usersService = new UsersService()
   const messagesService = new MessagesService()
+  let user_id = ''
 
   socket.on('client_first_access', async params => {
     const { text, email } = params
-    let user_id = ''
     const userExists = await usersService.findByEmail(email)
     if (!userExists) {
       const newUser: IUser = { email: email }
@@ -32,5 +32,20 @@ serverWs.on('connect', socket => {
       }
     }
     await messagesService.create({ user_id, text })
+    const allMessages = await messagesService.listByEmail(email)
+    socket.emit('client_list_all_messages', allMessages)
+
+    const allUsers = await connectionService.findAllWithoutAdmin()
+    serverWs.emit('admin_list_all_users', allUsers)
+  })
+  socket.on('client_send_to_admin', async params => {
+    const { text, socket_admin_id } = params
+    const socket_id = socket.id
+    const { user_id } = await connectionService.findBySocketId(socket.id)
+    const message = messagesService.create({ admin_id: socket_admin_id, user_id, text })
+    serverWs.to('socket_admin_id').emit('admin_receive_message', {
+      message,
+      socket_id
+    })
   })
 })
