@@ -1,1 +1,6 @@
 https://nextlevelweek.com/episodios/node/3/edicao/5
+
+$ yarn add socket.io
+$ yarn add -D @types/socket.io
+$ yarn add ejs // para rodar o client
+$ yarn add socket.io-client // para uso do client
