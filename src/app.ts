@@ -19,6 +19,9 @@ app.set('view engine', 'html')
 app.get('/pages/client', (request: Request, response: Response) => {
   return response.render('html/client.html')
 })
+app.get('/pages/admin', (request: Request, response: Response) => {
+  return response.render('html/admin.html')
+})
 
 const serverHttp = http.createServer(app) // protocolo http
 const serverWs = new Server(serverHttp) // protocolo WS trabalha junto com o http

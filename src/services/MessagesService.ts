@@ -17,10 +17,14 @@ class MessagesService {
     return this.messagesRepository.save(newMessage)
   }
 
-  async listByUser(userEmail: string): Promise<Message[]> {
+  async listByEmail(userEmail: string): Promise<Message[]> {
     const usersRepository = getCustomRepository(UsersRepository)
     const { id } = await usersRepository.findOne({ where: { email: userEmail } })
     return this.messagesRepository.find({ where: { user_id: id } })
+  }
+
+  async listByUser(userId: string): Promise<Message[]> {
+    return this.messagesRepository.find({ where: { user_id: userId } })
   }
 }
 

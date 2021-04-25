@@ -13,7 +13,7 @@ class MessagesController {
   showByUser(email: string) {
     // validar e checar autorização
     const messagesService = new MessagesService()
-    return messagesService.listByUser(email)
+    return messagesService.listByEmail(email)
   }
 }
 
